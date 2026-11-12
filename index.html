@@ -693,6 +693,8 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && sta
 let doneAt = 0;
 function finish(){
   doneAt = performance.now(); state = 'done'; clock.base = songT(); clock.running = false; led.classList.remove('on');
+  // Big Bang Arcade: report the course result (records + stomps + bonus, x100) and the cleared course
+  try { if (window.bbaScore) { window.bbaScore(Math.max(score(chars[0]), mode === 2 ? score(chars[1]) : 0) * 100); window.bbaLevel(); } } catch (e) {}
   const at = doneAt;
   setTimeout(() => { if (state === 'done' && doneAt === at && !menuOpen) openMenu('end'); }, 3500);
 }
@@ -1212,4 +1214,5 @@ timeLyrics();
 (document.fonts && document.fonts.load ? Promise.all([document.fonts.load('8px "Press Start 2P"'), document.fonts.load('16px "VT323"')]).catch(()=>{}) : Promise.resolve()).then(() => { lyrIdx = -2; requestAnimationFrame(frame); });
 </script>
 
+<script src="https://cruizin.chucksi.com/hub.js" data-game="gamerboy" async></script>
 </body></html>
