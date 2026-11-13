@@ -679,6 +679,7 @@ function startGame(){
   closeMenu();
   reset();
   state = 'play';
+  try { if (window.bbHub) { window.bbHub('course_start'); window.bbHub(mode === 2 ? 'mode:two_player' : 'mode:one_player'); } } catch (e) {}
   const now = performance.now();
   clock.base = 0; clock.at = now; clock.running = true;
   try { audio.currentTime = 0; } catch(e){}
@@ -695,6 +696,7 @@ function finish(){
   doneAt = performance.now(); state = 'done'; clock.base = songT(); clock.running = false; led.classList.remove('on');
   // Big Bang Arcade: report the course result (records + stomps + bonus, x100) and the cleared course
   try { if (window.bbaScore) { window.bbaScore(Math.max(score(chars[0]), mode === 2 ? score(chars[1]) : 0) * 100); window.bbaLevel(); } } catch (e) {}
+  try { if (window.bbHub) window.bbHub('course_done', Math.max(score(chars[0]), mode === 2 ? score(chars[1]) : 0) * 100); } catch (e) {}
   const at = doneAt;
   setTimeout(() => { if (state === 'done' && doneAt === at && !menuOpen) openMenu('end'); }, 3500);
 }
